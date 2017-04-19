@@ -23,7 +23,7 @@ public class JPAConfiguration {
  		MysqlDataSource dataSource = new MysqlDataSource();
  		dataSource.setUrl("jdbc:mysql://localhost:3306/jpa?useUnicode=true&characterEncoding=utf8");
  		dataSource.setUser("root");
- 		dataSource.setPassword("root");
+ 		dataSource.setPassword("123");
  		return dataSource; 
  	}
 	/**
