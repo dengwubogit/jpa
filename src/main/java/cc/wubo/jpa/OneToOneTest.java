@@ -2,6 +2,9 @@ package cc.wubo.jpa;
 
 import java.util.UUID;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,11 @@ public class OneToOneTest {
 		personRepository = context.getBean(PersonRepository.class);
 		idCardRepository = context.getBean(IdCardRepository.class);
 		personService = context.getBean(PersonService.class);
+		
+	}
+	
+	@Test
+	public void run() {
 		
 	}
 	/**
@@ -80,5 +88,48 @@ public class OneToOneTest {
 		System.out.println(person.getName());
 		System.out.println(person.getIdCard()); // 获取不到
 	}
+	/**
+	 * 双向保存
+	 */
+	@Test
+	@Transactional
+	public void doubleOneToOne() {
+		
+		Person p = new Person();
+		p.setAge(1);
+		p.setName("biaoge");
+		IdCard card = new IdCard();
+		card.setCardNum("94100");
+		card.setPerson(p);
+		p.setIdCard(card);
+		
+		idCardRepository.save(card);
+	}
+	
+	/**
+	 * 解决双向一对一递归查询
+	 */
+	@Test
+	public void doubleSelect() {
+		
+		System.out.println(personRepository.findOne(1));
+	}
+	/**
+	 * 解决双向一对一递归删除
+	 */
+	@Test
+	public void doubledelete() {
+		
+		personRepository.delete(1);
+	}
+	/**
+	 * 双向一对一关系中，需要注意的是，
+	 * 1. 双方不能是fatch=FetchType.EAGER，必须要有一方是LAZY
+	 * 2. 如果双方有一方设置了LAZY，则LAZY的一方不能再去使用另一方了，因为你使用另一方的话就又去加载了，容易递归
+	 * 
+	 * 两种事项一对一关联关系的方法
+	 * 1. 双方都使用@OneToOne，配合@JoinColumn（双方对应的表都会有一个双方的id）
+	 * 2. 双方有使用@OneToOne,然后在被拥有方设置mappedBy（只在被拥有方会持有拥有放的id）
+	 */
 
 }

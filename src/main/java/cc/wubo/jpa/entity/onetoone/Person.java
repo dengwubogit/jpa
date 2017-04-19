@@ -27,7 +27,8 @@ public class Person {
 	//optional 一个区别是
 	//optional=true， 使用的是left join关联（@OneToOne里默认是true）
 	//optional=false，使用的是inner join关联
-	@OneToOne(cascade=CascadeType.PERSIST,fetch=FetchType.EAGER,optional=false) //设置级联关系--级联保存
+	//注意将optional=false，在双向关联时会影响级联插入数据
+	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)//,optional=false) //设置级联关系--级联保存
 	@JoinColumn(name="card_id") //自定义外键字段的名字
 	private IdCard idCard;
 	public Integer getId() {
@@ -57,7 +58,7 @@ public class Person {
 	@Override
 	public String toString() {
 		return "Person [id=" + id + ", name=" + name + ", age=" + age
-				+ ", idCard=" + idCard + "]";
+				+  "]";
 	}
 	
 	
